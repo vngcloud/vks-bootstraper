@@ -45,6 +45,6 @@ setup(
         "click >= 8.0.3",
     ],
     entry_points={
-        'console_scripts': ['vks-bootstraper=vks.__main__:cli'],
+        'console_scripts': ['vks-bootstraper=vks-bootstraper.vks.__main__:cli'],
     },
 )
