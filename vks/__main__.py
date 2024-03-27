@@ -16,5 +16,5 @@ def cli():
 
 cli.add_command(metadata.get_instance_id)
 
-if __name__ == "__main__":
-    cli()
+# if __name__ == "__main__":
+#     cli()
