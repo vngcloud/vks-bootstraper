@@ -22,3 +22,4 @@ rad.json
 TestResults.xml
 .idea/
 /vks_bootstraper.egg-info
+/build/
