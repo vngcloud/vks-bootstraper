@@ -9,7 +9,7 @@ import requests
 _metadata_url = "http://169.254.169.254/openstack/latest/meta_data.json"
 
 
-@click.command()
+@click.command("get-instance-id", help="Get the vServer ID of the current instance")
 @click.option("--short/--long", default=False, help="Short or long output")
 def get_instance_id(short):
     response = requests.get(_metadata_url)
@@ -26,6 +26,7 @@ def get_instance_id(short):
 
 
 @click.group()
+@click.version_option("0.1.0", prog_name="vks-bootstraper")
 def cli():
     pass
 
