@@ -15,4 +15,4 @@ dependencies = [
 ]
 
 [project.scripts]
-vks-bootstraper = "vks_bootstraper.__main__:cli"
+vks-bootstraper = "vks.__main__:cli"
