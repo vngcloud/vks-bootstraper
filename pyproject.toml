@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=65.5.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vks-bootstraper"
+version = "0.1.0"
+description = "The CLI tool to boostrap the instances of VKS clusters."
+readme = "README.md"
+authors = [{ name = "Cuong. Duong Manh", email = "cuongdm3@vng.com.vn" }]
+dependencies = [
+    "requests >= 2.25.1",
+    "click >= 8.0.3",
+]
+
+[project.scripts]
+vks-bootstraper = "vks.__main__:cli"

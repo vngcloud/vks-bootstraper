@@ -1,6 +1,7 @@
 """
 Author: Cuong. Duong Manh <cuongdm3@vng.com.vn>
-Description: The CLI tool to boostrap the instances of VKS clusters.
+Date: 2023-03-26
+Description: The commands calling the metadata service to get the instance information.
 """
 
 import click
@@ -23,15 +24,3 @@ def get_instance_id(short):
     except Exception as e:
         click.echo(f"Error: {e}")
         raise SystemExit(1)
-
-
-@click.group()
-@click.version_option("0.1.0", prog_name="vks-bootstraper")
-def cli():
-    pass
-
-
-cli.add_command(get_instance_id)
-
-if __name__ == "__main__":
-    cli()
