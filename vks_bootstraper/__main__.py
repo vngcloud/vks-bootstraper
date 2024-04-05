@@ -8,12 +8,14 @@ from . import metadata
 
 
 @click.group()
-@click.version_option("0.1.0", prog_name="vks-bootstraper")
+@click.version_option("0.2.0", prog_name="vks-bootstraper")
 def cli():
     pass
 
 
-cli.add_command(metadata.get_instance_id)
+cli.add_command(metadata.get_instance_id)  # noqa
+cli.add_command(metadata.get_local_ipv4)  # noqa
+cli.add_command(metadata.prepare_kubeadm_config)  # noqa
 
 # if __name__ == "__main__":
 #     cli()

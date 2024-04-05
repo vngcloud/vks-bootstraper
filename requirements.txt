@@ -1,2 +1,3 @@
-requests==2.25.1
+requests~=2.31.0
 click==8.0.3
+pyyaml>=5.4.0
