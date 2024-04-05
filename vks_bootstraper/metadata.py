@@ -26,7 +26,7 @@ def _get_instance_id():
 
 
 def _get_local_ip_v4():
-    response = requests.get(_metadata_url)
+    response = requests.get(_local_ip_v4_url)
     response.raise_for_status()
     try:
         ipv4 = response.text
