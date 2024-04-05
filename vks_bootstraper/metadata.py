@@ -53,7 +53,7 @@ def get_instance_id(short):
 @click.option("-s", "--short", default=False, is_flag=True, help="Short or long output")
 def get_local_ipv4(short):
     try:
-        ipv4 = get_local_ipv4()
+        ipv4 = _get_local_ip_v4()
         if short:
             click.echo(ipv4)
         else:
