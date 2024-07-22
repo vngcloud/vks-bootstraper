@@ -82,13 +82,14 @@ def get_local_ipv4(short):
 
 @click.command("prepare-kubeadm-config", help="Prepare the kubeadm config file for the current instance")
 def prepare_kubeadm_config():
-    kubeadmin_config = None
+    kubeadm_cfg_content = None
     with open(_kubeadmin_config_path, "r") as stream:
         try:
             kubeadm_config = yaml.safe_load(stream)
             kubeadm_config["nodeRegistration"]["kubeletExtraArgs"]["node-ip"] = _get_local_ip_v4()
             kubeadm_config["nodeRegistration"]["kubeletExtraArgs"][
                 "provider-id"] = _provider_id_prefix + _get_instance_id()
+            kubeadm_cfg_content = kubeadm_config
 
             click.echo(f"Kubeadm config: {kubeadm_config}")
         except yaml.YAMLError as exc:
@@ -97,12 +98,12 @@ def prepare_kubeadm_config():
 
     with open(_kubeadmin_config_path, "w") as stream:
         try:
-            if kubeadmin_config is None:
+            if kubeadm_cfg_content is None:
                 click.echo("Error: Cannot read the kubeadm config file")
                 raise SystemExit(1)
 
             # Write this file
-            yaml.dump(kubeadm_config, stream)
+            yaml.dump(kubeadm_cfg_content, stream)
             click.echo(f"Kubeadm config file is written to {_kubeadmin_config_path}")
 
         except yaml.YAMLError as exc:

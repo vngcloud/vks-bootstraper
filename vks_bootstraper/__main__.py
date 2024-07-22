@@ -8,7 +8,7 @@ from . import metadata
 
 
 @click.group()
-@click.version_option("0.2.7", prog_name="vks-bootstraper")
+@click.version_option("0.2.8", prog_name="vks-bootstraper")
 def cli():
     pass
 
