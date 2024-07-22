@@ -28,19 +28,28 @@ def _get_instance_id():
         except Exception as _:
             pass
 
-        if time.time() - start > 1800: # greater than 30 minutes
+        if time.time() - start > 1800:  # greater than 30 minutes
             raise Exception("Cannot get the instance ID")
 
         time.sleep(10)
 
+
 def _get_local_ip_v4():
-    response = requests.get(_local_ip_v4_url)
-    response.raise_for_status()
-    try:
-        ipv4 = response.text
-        return ipv4
-    except Exception as e:
-        raise Exception(f"Cannot get local IPv4: {e}")
+    start = time.time()
+
+    while True:
+        try:
+            response = requests.get(_local_ip_v4_url, timeout=5)  # timeout of 5 seconds
+            if response.status_code >= 200 and response.status_code < 300:  # noqa
+                ipv4 = response.text
+                return ipv4
+        except Exception as _:
+            pass
+
+        if time.time() - start > 1800:  # greater than 30 minutes
+            raise Exception("Cannot get the local IPv4")
+
+        time.sleep(10)
 
 
 @click.command("get-instance-id", help="Get the vServer ID of the current instance")
