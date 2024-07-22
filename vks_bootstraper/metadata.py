@@ -82,7 +82,7 @@ def get_local_ipv4(short):
 
 @click.command("prepare-kubeadm-config", help="Prepare the kubeadm config file for the current instance")
 def prepare_kubeadm_config():
-    with open(_kubeadmin_config_path, "r") as stream:
+    with open(_kubeadmin_config_path, "w") as stream:
         try:
             kubeadm_config = yaml.safe_load(stream)
             kubeadm_config["nodeRegistration"]["kubeletExtraArgs"]["node-ip"] = _get_local_ip_v4()
