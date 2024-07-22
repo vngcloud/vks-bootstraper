@@ -5,6 +5,7 @@ Description: The commands calling the metadata service to get the instance infor
 """
 
 import click
+import time
 import yaml
 import requests
 
@@ -16,14 +17,21 @@ _provider_id_prefix = "vngcloud://"
 
 
 def _get_instance_id():
-    response = requests.get(_metadata_url)
-    response.raise_for_status()
-    try:
-        instance_id = response.json()["meta"]["portal_uuid"]
-        return instance_id
-    except Exception as e:
-        raise Exception(f"Cannot get instance ID: {e}")
+    start = time.time()
 
+    while True:
+        try:
+            response = requests.get(_metadata_url, timeout=5)  # timeout of 5 seconds
+            if response.status_code >= 200 and response.status_code < 300:  # noqa
+                instance_id = response.json()["meta"]["portal_uuid"]
+                return instance_id
+        except Exception as _:
+            pass
+
+        if time.time() - start > 1800: # greater than 30 minutes
+            raise Exception("Cannot get the instance ID")
+
+        time.sleep(10)
 
 def _get_local_ip_v4():
     response = requests.get(_local_ip_v4_url)
