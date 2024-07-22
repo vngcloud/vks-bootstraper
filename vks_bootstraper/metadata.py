@@ -92,8 +92,8 @@ def prepare_kubeadm_config():
             click.echo(f"Kubeadm config: {kubeadm_config}")
 
             # Write this file
-            # yaml.dump(kubeadm_config, stream)
-            # click.echo(f"Kubeadm config file is written to {_kubeadmin_config_path}")
+            yaml.dump(kubeadm_config, stream)
+            click.echo(f"Kubeadm config file is written to {_kubeadmin_config_path}")
 
         except yaml.YAMLError as exc:
             click.echo(f"Error: {exc}")
