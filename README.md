@@ -6,6 +6,12 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
 
 <hr>
 
+# Installation
+- Install the `vks-bootstraper:latest` with `pip` tool:
+  ```bash
+  pip3 install --upgrade vks-bootstraper
+  ```
+
 # Build
 - Install the Pip dependencies
   ```bash
@@ -24,6 +30,7 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
   ```bash
   twine upload dist/*
   ```
+
 # Others
 ## The `.pypirc` config file
 - The config file should be located at `$HOME/.pypirc`
