@@ -31,5 +31,5 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
   ```ini
   [pypi]
     username = __token__
-    password = pypi-AgEIcHlwaS5vcmcCJGM2YWU2YjJhLWNhNWMtNDQ5Yy1iZDRlLTVkNjVlZmU3ZWZjYgACKlszLCJiN2ZhNGU1Mi0wNTg0LTQ4YWUtOWIzMy1jYmNkM2MzMTcxYWEiXQAABiAXjySJSXqvHP8Sjfv1ktDgmgM33b-odDti45c5WDvJ8A
+    password = pypi-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   ```
