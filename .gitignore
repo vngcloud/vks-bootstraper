@@ -24,3 +24,4 @@ TestResults.xml
 /vks_bootstraper.egg-info
 /build/
 __pycache__
+/dist/

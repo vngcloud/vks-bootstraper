@@ -9,6 +9,7 @@ import time
 import yaml
 import requests
 
+_vcr_url = "https://vcr.vngcloud.vn"  # The VngCloud Registry URL domain
 _metadata_url_prefix = "http://169.254.169.254"
 _metadata_url = _metadata_url_prefix + "/openstack/latest/meta_data.json"
 _local_ip_v4_url = _metadata_url_prefix + "/latest/meta-data/local-ipv4"
@@ -25,13 +26,43 @@ def _get_instance_id():
             if response.status_code >= 200 and response.status_code < 300:  # noqa
                 instance_id = response.json()["meta"]["portal_uuid"]
                 return instance_id
-        except Exception as _:
-            pass
+        except (Exception,) as e:
+            click.echo(f"[ERROR] - CANNOT get the instance ID: {e}")
 
         if time.time() - start > 1800:  # greater than 30 minutes
-            raise Exception("Cannot get the instance ID")
+            raise Exception("CANNOT get the instance ID")
 
         time.sleep(10)
+
+
+def _precheck_vngcloud_services():
+    start = time.time()
+
+    while True:
+        try:
+            response = requests.get(_vcr_url, timeout=5)  # timeout of 5 seconds
+            if response.status_code >= 200 and response.status_code < 300:  # noqa
+                return
+        except (Exception,) as e:
+            click.echo(f"[ERROR] - CANNOT reach to the VngCloud services: {e}")
+
+        if time.time() - start > 1800:  # greater than 30 minutes
+            raise Exception("CANNOT reach to the external internet")
+
+        time.sleep(10)
+
+
+def _waiting_instance_booted():
+    phase = "metadata"
+    while True:
+        if phase == "metadata":
+            _get_local_ip_v4()
+            phase = "internet"
+        elif phase == "services":
+            _precheck_vngcloud_services()
+            phase = "done"
+        elif phase == "done":
+            break
 
 
 def _get_local_ip_v4():
@@ -43,11 +74,11 @@ def _get_local_ip_v4():
             if response.status_code >= 200 and response.status_code < 300:  # noqa
                 ipv4 = response.text
                 return ipv4
-        except Exception as _:
-            pass
+        except (Exception,) as e:
+            click.echo(f"[ERROR] - CANNOT get the local IPv4: {e}")
 
         if time.time() - start > 1800:  # greater than 30 minutes
-            raise Exception("Cannot get the local IPv4")
+            raise Exception("CANNOT get the local IPv4")
 
         time.sleep(10)
 
@@ -62,7 +93,7 @@ def get_instance_id(short):
         else:
             click.echo(f"Instance ID: {instance_id}")
     except Exception as e:
-        click.echo(f"Error: {e}")
+        click.echo(f"[ERROR] - Failed to get instance ID: {e}")
         raise SystemExit(1)
 
 
@@ -76,7 +107,7 @@ def get_local_ipv4(short):
         else:
             click.echo(f"Local IPv4: {ipv4}")
     except Exception as e:
-        click.echo(f"Error: {e}")
+        click.echo(f"[ERROR] - Failed to get local IPv4 address: {e}")
         raise SystemExit(1)
 
 
@@ -91,21 +122,32 @@ def prepare_kubeadm_config():
                 "provider-id"] = _provider_id_prefix + _get_instance_id()
             kubeadm_cfg_content = kubeadm_config
 
-            click.echo(f"Kubeadm config: {kubeadm_config}")
+            click.echo(f"[INFO] - Kubeadm config: {kubeadm_config}")
         except yaml.YAMLError as exc:
-            click.echo(f"Error: {exc}")
+            click.echo(f"[ERROR] - Failed to load kubeadm configuration file: {exc}")
             raise SystemExit(1)
 
     with open(_kubeadmin_config_path, "w") as stream:
         try:
             if kubeadm_cfg_content is None:
-                click.echo("Error: Cannot read the kubeadm config file")
+                click.echo("[ERROR] - The kubeadm config content is empty")
                 raise SystemExit(1)
 
             # Write this file
             yaml.dump(kubeadm_cfg_content, stream)
-            click.echo(f"Kubeadm config file is written to {_kubeadmin_config_path}")
+            click.echo(f"[INFO] - Kubeadm config content is written to {_kubeadmin_config_path}")
 
         except yaml.YAMLError as exc:
-            click.echo(f"Error: {exc}")
+            click.echo(f"[ERROR] - Failed to write kubeadm config content: {exc}")
             raise SystemExit(1)
+
+
+@click.command("waiting-instance-booted",
+               help="Waiting for the instance to be booted up, connect to the metadata service and reach to the VngCloud services")
+def waiting_instance_booted():
+    try:
+        _waiting_instance_booted()
+        click.echo("[INFO] - The instance is booted up and ready to use")
+    except Exception as e:
+        click.echo(f"[ERROR] - Failed to wait for the instance to be booted up: {e}")
+        raise SystemExit(1)
