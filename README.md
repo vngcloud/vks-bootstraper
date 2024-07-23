@@ -26,7 +26,7 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
   twine check dist/*
   ```
   
-- Publish the CLI to PyPi _(make sure you have configured the `$HOME/.pypirc` config file)_
+- Publish the CLI to PyPi _(make sure you have configured the `$HOME/.pypirc` config file, refer this [section](#the-pypirc-config-file) to pre-configure before performing this step)_
   ```bash
   twine upload dist/*
   ```
