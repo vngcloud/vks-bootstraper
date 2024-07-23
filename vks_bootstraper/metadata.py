@@ -57,7 +57,7 @@ def _waiting_instance_booted():
     while True:
         if phase == "metadata":
             _get_local_ip_v4()
-            phase = "internet"
+            phase = "services"
         elif phase == "services":
             _precheck_vngcloud_services()
             phase = "done"
