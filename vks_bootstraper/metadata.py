@@ -56,7 +56,7 @@ def _waiting_instance_booted():
     phase = "metadata"
     while True:
         if phase == "metadata":
-            _get_local_ip_v4()
+            _get_local_ipv4()
             phase = "services"
         elif phase == "services":
             _precheck_vngcloud_services()
@@ -65,7 +65,7 @@ def _waiting_instance_booted():
             break
 
 
-def _get_local_ip_v4():
+def _get_local_ipv4():
     start = time.time()
 
     while True:
@@ -101,7 +101,7 @@ def get_instance_id(short):
 @click.option("-s", "--short", default=False, is_flag=True, help="Short or long output")
 def get_local_ipv4(short):
     try:
-        ipv4 = _get_local_ip_v4()
+        ipv4 = _get_local_ipv4()
         if short:
             click.echo(ipv4)
         else:
@@ -117,7 +117,7 @@ def prepare_kubeadm_config():
     with open(_kubeadmin_config_path, "r") as stream:
         try:
             kubeadm_config = yaml.safe_load(stream)
-            kubeadm_config["nodeRegistration"]["kubeletExtraArgs"]["node-ip"] = _get_local_ip_v4()
+            kubeadm_config["nodeRegistration"]["kubeletExtraArgs"]["node-ip"] = _get_local_ipv4()
             kubeadm_config["nodeRegistration"]["kubeletExtraArgs"][
                 "provider-id"] = _provider_id_prefix + _get_instance_id()
             kubeadm_cfg_content = kubeadm_config
