@@ -4,10 +4,12 @@ Date: 2023-03-26
 Description: The commands calling the metadata service to get the instance information.
 """
 
+import os
 import click
 import time
 import yaml
 import requests
+import paramiko
 
 from python_hosts import Hosts, HostsEntry
 
@@ -90,6 +92,39 @@ def _add_host(file_path: str, domain: str, ipaddress: str):
     new_entry = HostsEntry(entry_type="ipv4", address=ipaddress, names=[domain])
     hosts.add([new_entry], True)
     hosts.write()
+
+
+def _generate_ssh_key():
+    # check if exists key, ignore
+    if os.path.exists(os.path.expanduser('~/.ssh/id_rsa')):
+        click.echo("[INFO] - The SSH key is already generated")
+        return
+
+    key = paramiko.RSAKey.generate(2048)
+
+    private_key_path = os.path.expanduser('~/.ssh/id_rsa')
+    public_key_path = os.path.expanduser('~/.ssh/id_rsa.pub')
+    # Save the private key
+    with open(private_key_path, 'w') as private_key_file:
+        key.write_private_key_file(private_key_file.name)
+
+    # Save the public key
+    with open(public_key_path, 'w') as public_key_file:
+        public_key_file.write(f"{key.get_name()} {key.get_base64()}\n")
+
+    # add to the authorized_keys
+    with open(os.path.expanduser('~/.ssh/authorized_keys'), 'a') as authorized_keys_file:
+        authorized_keys_file.write(f"{key.get_name()} {key.get_base64()}\n")
+
+
+@click.command("generate-ssh-key", help="Generate the SSH key for the current instance")
+def generate_ssh_key():
+    try:
+        _generate_ssh_key()
+        click.echo("[INFO] - The SSH key is generated and added to the authorized_keys file")
+    except Exception as e:
+        click.echo(f"[ERROR] - Failed to generate the SSH key: {e}")
+        raise SystemExit(1)
 
 
 @click.command("add-host", help="Add a new host to the /etc/hosts file")
