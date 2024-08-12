@@ -9,6 +9,8 @@ import time
 import yaml
 import requests
 
+from python_hosts import Hosts, HostsEntry
+
 _vcr_url = "https://vcr.vngcloud.vn"  # The VngCloud Registry URL domain
 _metadata_url_prefix = "http://169.254.169.254"
 _metadata_url = _metadata_url_prefix + "/openstack/latest/meta_data.json"
@@ -81,6 +83,26 @@ def _get_local_ipv4():
             raise Exception("CANNOT get the local IPv4")
 
         time.sleep(10)
+
+
+def _add_host(file_path: str, domain: str, ipaddress: str):
+    hosts = Hosts(path=file_path)
+    new_entry = HostsEntry(entry_type="ipv4", address=ipaddress, names=[domain])
+    hosts.add([new_entry], True)
+    hosts.write()
+
+
+@click.command("add-host", help="Add a new host to the /etc/hosts file")
+@click.option("-d", "--domain", required=True, help="The domain name")
+@click.option("-i", "--ipaddress", required=True, help="The IP address")
+@click.option("-f", "--file-path", default="/etc/hosts", help="The file path of the hosts file")
+def add_host(domain, ipaddress, file_path):
+    try:
+        _add_host(file_path, domain, ipaddress)
+        click.echo(f"[INFO] - The host {domain} with IP {ipaddress} is added to the {file_path} file")
+    except Exception as e:
+        click.echo(f"[ERROR] - Failed to add the host to the {file_path} file: {e}")
+        raise SystemExit(1)
 
 
 @click.command("get-instance-id", help="Get the vServer ID of the current instance")
