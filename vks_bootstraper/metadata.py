@@ -105,7 +105,7 @@ def _generate_ssh_key():
     private_key_path = os.path.expanduser('~/.ssh/id_rsa')
     public_key_path = os.path.expanduser('~/.ssh/id_rsa.pub')
     # Save the private key
-    with open(os.open(path=private_key_path, flags=os.O_WRONLY), 'w') as private_key_file:
+    with open(os.open(path=private_key_path, flags=os.O_CREAT), 'w') as private_key_file:
         key.write_private_key_file(private_key_file.name)
 
     # Save the public key
