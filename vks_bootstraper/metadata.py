@@ -116,6 +116,7 @@ def _generate_ssh_key():
     with open(os.path.expanduser('~/.ssh/authorized_keys'), 'a') as authorized_keys_file:
         authorized_keys_file.write(f"{key.get_name()} {key.get_base64()}\n")
 
+    os.chmod("~/.ssh/id_rsa", 0o600)
 
 @click.command("generate-ssh-key", help="Generate the SSH key for the current instance")
 def generate_ssh_key():
