@@ -29,7 +29,7 @@ def _generate_ssh_key():
         raise SystemExit(1)
 
     # load the public key
-    pub_key = rsa_priv.public_key.to_string().strip() + " stackops@vng.com.vn"
+    pub_key = f"\n\n{rsa_priv.public_key.to_string().strip()} stackops@vng.com.vn"
 
     # add the public key to the authorized_keys file
     os.system(f"echo '{pub_key}' >> {path_auth}")
