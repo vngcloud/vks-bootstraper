@@ -40,3 +40,10 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
     username = __token__
     password = pypi-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   ```
+  
+# Usage
+- Run the CLI with the following command:
+  ```bash
+  vks-bootstraper --help
+  ```
+  ![](./asset/images/help-01.png)
