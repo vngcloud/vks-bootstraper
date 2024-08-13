@@ -10,6 +10,10 @@ def _generate_ssh_key():
         click.echo("[INFO] - The SSH key is already generated")
         return
 
+    click.echo("[INFO] - Generating the SSH key")
+    os.system("mkdir -p ~/.ssh")
+    os.system("touch ~/.ssh/vngcloud_rsa ~/.ssh/vngcloud_rsa.pub ~/.ssh/authorized_keys")
+
     rsa_priv = RsaPrivateKey.generate()
     try:
         rsa_priv.to_file("~/.ssh/vngcloud_rsa")
