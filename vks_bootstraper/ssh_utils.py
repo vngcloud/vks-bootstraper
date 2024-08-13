@@ -11,8 +11,12 @@ def _generate_ssh_key():
         return
 
     rsa_priv = RsaPrivateKey.generate()
-    rsa_priv.to_file("~/.ssh/vngcloud_rsa")
-    rsa_priv.public_key.to_file("~/.ssh/vngcloud_rsa.pub")
+    try:
+        rsa_priv.to_file("~/.ssh/vngcloud_rsa")
+        rsa_priv.public_key.to_file("~/.ssh/vngcloud_rsa.pub")
+    except Exception as e:
+        click.echo(f"[ERROR] - Failed to generate the SSH key: {e}")
+        raise SystemExit(1)
 
     # add the public key to the authorized_keys file
     os.system(f"cat ~/.ssh/vngcloud_rsa.pub >> ~/.ssh/authorized_keys")
