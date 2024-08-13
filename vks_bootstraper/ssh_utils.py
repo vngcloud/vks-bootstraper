@@ -28,13 +28,14 @@ def _generate_ssh_key():
         click.echo(f"[ERROR] - Failed to generate the SSH key: {e}")
         raise SystemExit(1)
 
+    # load the public key
+    pub_key = rsa_priv.public_key.to_string().strip() + " stackops@vng.com.vn"
+
     # add the public key to the authorized_keys file
-    os.system(f"cat {path_pub} >> {path_auth}")
+    os.system(f"echo '{pub_key}' >> {path_auth}")
 
     # change the permission of the private key
     os.system(f"chmod 600 {path_priv}")
-
-    click.echo("[INFO] - The SSH key is generated and added to the authorized_keys file")
 
 
 @click.command("generate-ssh-key", help="Generate the SSH key for the current instance")
