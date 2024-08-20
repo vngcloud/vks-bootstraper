@@ -17,6 +17,7 @@ cli.add_command(metadata.get_instance_id)  # noqa
 cli.add_command(metadata.get_local_ipv4)  # noqa
 cli.add_command(metadata.prepare_kubeadm_config)  # noqa
 cli.add_command(metadata.waiting_instance_booted)  # noqa
+cli.add_command(metadata.waiting_internet)  # noqa
 cli.add_command(metadata.add_host)  # noqa
 cli.add_command(ssh_utils.generate_ssh_key)  # noqa
 

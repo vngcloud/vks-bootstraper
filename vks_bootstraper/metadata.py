@@ -59,8 +59,15 @@ def _waiting_instance_booted():
     while True:
         if phase == "metadata":
             _get_local_ipv4()
-            phase = "services"
-        elif phase == "services":
+            phase = "done"
+        elif phase == "done":
+            break
+
+
+def _waiting_the_internet():
+    phase = "internet"
+    while True:
+        if phase == "internet":
             _precheck_vngcloud_services()
             phase = "done"
         elif phase == "done":
@@ -172,4 +179,15 @@ def waiting_instance_booted():
         click.echo("[INFO] - The instance is booted up and ready to use")
     except Exception as e:
         click.echo(f"[ERROR] - Failed to wait for the instance to be booted up: {e}")
+        raise SystemExit(1)
+
+
+@click.command("waiting-internet",
+               help="Waiting for the instance to reach to the external internet and the VngCloud services")
+def waiting_internet():
+    try:
+        _waiting_the_internet()
+        click.echo("[INFO] - The instance is connected to the external internet and the VngCloud services")
+    except Exception as e:
+        click.echo(f"[ERROR] - Failed to wait for the instance to reach to the external internet: {e}")
         raise SystemExit(1)
