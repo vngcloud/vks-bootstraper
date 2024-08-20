@@ -8,7 +8,7 @@ from . import metadata, ssh_utils
 
 
 @click.group()
-@click.version_option("1.3.10", prog_name="vks-bootstraper")
+@click.version_option("1.4.0", prog_name="vks-bootstraper")
 def cli():
     pass
 

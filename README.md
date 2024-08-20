@@ -22,6 +22,7 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
 
 - Build the CLI
   ```bash
+  rm -rf dist
   python3 -m build
   twine check dist/*
   ```
