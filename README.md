@@ -46,4 +46,20 @@ _The simple CLI tool to bootstrap instances of VKS workload clusters_
   ```bash
   vks-bootstraper --help
   ```
-  ![](./asset/images/help-01.png)
+  > ```bash
+  > ➜   vks-bootstraper --help             
+  > Usage: vks-bootstraper [OPTIONS] COMMAND [ARGS]...
+  > 
+  > Options:
+  >   --version  Show the version and exit.
+  >   --help     Show this message and exit.
+  > 
+  > Commands:
+  >   add-host                 Add a new host to the /etc/hosts file
+  >   generate-ssh-key         Generate the SSH key for the current instance
+  >   get-instance-id          Get the vServer ID of the current instance
+  >   get-local-ipv4           Get the local IPv4 of the current instance
+  >   prepare-kubeadm-config   Prepare the kubeadm config file for the...
+  >   waiting-instance-booted  Waiting for the instance to be booted up,...
+  >   waiting-internet         Waiting for the instance to reach to the...
+  > ```
