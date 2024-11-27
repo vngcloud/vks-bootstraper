@@ -194,7 +194,7 @@ def prepare_kubeadm_config(path):
             kubeadm_config["nodeRegistration"]["kubeletExtraArgs"][
                 "provider-id"] = _provider_id_prefix + _get_instance_id()
             kubeadm_cfg_content = kubeadm_config
-            kubeadm_cfg_content["name"] = _get_instance_name()
+            kubeadm_cfg_content["nodeRegistration"]["name"] = _get_instance_name()
 
         except yaml.YAMLError as exc:
             click.echo(
@@ -289,7 +289,7 @@ def generate_ssh_key():
 
 
 @click.group()
-@click.version_option("1.4.0", prog_name="vks-bootstraper")
+@click.version_option("1.5.2", prog_name="vks-bootstraper")
 def cli():
     pass
 
