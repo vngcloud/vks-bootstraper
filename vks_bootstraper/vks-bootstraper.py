@@ -14,6 +14,7 @@ import os
 
 from python_hosts import Hosts, HostsEntry
 from sshkey_tools.keys import RsaPrivateKey
+from typing import Dict, Any
 
 _vcr_url = "https://vcr.vngcloud.vn"  # The VngCloud Registry URL domain
 _metadata_url_prefix = "http://169.254.169.254"
@@ -190,11 +191,27 @@ def prepare_kubeadm_config(path):
     with open(path, "r") as stream:
         try:
             kubeadm_config = yaml.safe_load(stream)
-            kubeadm_config["nodeRegistration"]["kubeletExtraArgs"]["node-ip"] = _get_local_ipv4()
-            kubeadm_config["nodeRegistration"]["kubeletExtraArgs"][
-                "provider-id"] = _provider_id_prefix + _get_instance_id()
-            kubeadm_cfg_content = kubeadm_config
-            kubeadm_cfg_content["nodeRegistration"]["name"] = _get_instance_name()
+            if kubeadm_config["apiVersion"].strip() == "kubeadm.k8s.io/v1beta4":
+                filtered_data = [item for item in kubeadm_config["nodeRegistration"]["kubeletExtraArgs"] if
+                                 item["name"] not in ("node-ip", "provider-id", "")]
+                filtered_data.append({
+                    "name": "node-ip",
+                    "value": _get_local_ipv4()
+                })
+                filtered_data.append({
+                    "name": "provider-id",
+                    "value": _provider_id_prefix + _get_instance_id()
+                })
+
+                kubeadm_config["nodeRegistration"]["kubeletExtraArgs"] = filtered_data
+                kubeadm_cfg_content = kubeadm_config
+                kubeadm_cfg_content["nodeRegistration"]["name"] = _get_instance_name()
+            else:
+                kubeadm_config["nodeRegistration"]["kubeletExtraArgs"]["node-ip"] = _get_local_ipv4()
+                kubeadm_config["nodeRegistration"]["kubeletExtraArgs"][
+                    "provider-id"] = _provider_id_prefix + _get_instance_id()
+                kubeadm_cfg_content = kubeadm_config
+                kubeadm_cfg_content["nodeRegistration"]["name"] = _get_instance_name()
 
         except yaml.YAMLError as exc:
             click.echo(
@@ -216,6 +233,8 @@ def prepare_kubeadm_config(path):
             click.echo(
                 f"[ERROR] - Failed to write kubeadm config content: {exc}")
             raise SystemExit(1)
+
+
 
 
 @click.command("waiting-instance-booted",
