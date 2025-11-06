@@ -51,8 +51,12 @@ def _get_instance_id():
             # timeout of 5 seconds
             response = requests.get(_metadata_url, timeout=5)
             if response.status_code >= 200 and response.status_code < 300:  # noqa
-                instance_id = response.json()["meta"]["portal_uuid"]
-                return instance_id
+                meta = response.json().get("meta", {})
+                instance_id = meta.get("portal_uuid")
+                if instance_id:
+                    return instance_id
+                else:
+                    click.echo("[WARNING] - Provider ID does not exist. Retry...")
         except (Exception,) as e:
             click.echo(f"[ERROR] - CANNOT get the instance ID: {e}")
 

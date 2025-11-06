@@ -1,20 +1,31 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+# ======================================================
+# PyInstaller SPEC file for vks-bootstraper CLI tool
+# Author: Cuong. Duong Manh <cuongdm3@vng.com.vn>
+# ======================================================
+
+block_cipher = None
 
 a = Analysis(
     ['vks-bootstraper.py'],
-    pathex=['/home/cuongdm/anaconda3/envs/vks-bootstraper/lib/python3.10/site-packages', '/home/cuongdm/anaconda3/envs/vks-bootstraper/lib/python310.zip', '/home/cuongdm/anaconda3/envs/vks-bootstraper/lib/python3.10', '/home/cuongdm/anaconda3/envs/vks-bootstraper/lib/python3.10/lib-dynload', '/home/cuongdm/.local/lib/python3.10/site-packages'],
+    pathex=['.'],
     binaries=[],
     datas=[],
-    hiddenimports=[],
+    hiddenimports=[
+        'click',
+        'requests',
+        'yaml',
+        'python_hosts',
+        'sshkey_tools',
+    ],
     hookspath=[],
-    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
-    optimize=0,
 )
-pyz = PYZ(a.pure)
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
     pyz,
@@ -31,8 +42,4 @@ exe = EXE(
     runtime_tmpdir=None,
     console=True,
     disable_windowed_traceback=False,
-    argv_emulation=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
 )

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=65.5.0", "wheel"]
+requires = ["setuptools>=65.5.0","wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,11 +7,10 @@ name = "vks-bootstraper"
 version = "1.4.0"
 description = "The CLI tool to boostrap the instances of VKS clusters."
 readme = "README.md"
-authors = [{ name = "Cuong. Duong Manh", email = "cuongdm3@vng.com.vn" }]
+requires-python = ">=3.8"
 dependencies = [
     "requests >= 2.25.1",
     "click >= 8.0.3",
-    "setuptools>=65.5.0",
     "pyyaml >= 5.4.1",
 ]
 
