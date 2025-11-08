@@ -113,7 +113,8 @@ def _get_local_ipv4():
             response = requests.get(_local_ip_v4_url, timeout=5)
             if response.status_code >= 200 and response.status_code < 300:  # noqa
                 ipv4 = response.text
-                return ipv4
+                if ipv4:
+                    return ipv4
         except (Exception,) as e:
             click.echo(f"[ERROR] - CANNOT get the local IPv4: {e}")
 
